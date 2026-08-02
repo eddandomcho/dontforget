@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+from datetime import date 
 from typing import Optional, Any
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -175,6 +176,15 @@ def transform_dtypes_in_tuple(import_data: list) -> list:
     return export_data
 
 
+def filter_empty_rows(json_data):
+    new_list = list()
+    first_row_name = str(list(json_data[0].keys())[0])
+    for record in json_data:
+        if record.get(first_row_name) != "":
+            new_list.append(record)
+    return new_list
+
+
 if __name__ == "__main__":
     gc = get_gspread_client()
     print(type(gc), gc)
@@ -184,5 +194,9 @@ if __name__ == "__main__":
     # df = pd.DataFrame(records)
     # df = df[df['Name'].str.strip() != '']
     # print(df)
+    records = filter_empty_rows(records)
     with open("viewing_use.json", "w", encoding = "utf-8") as f:
         json.dump(records, f, indent = 2, ensure_ascii=False)
+    
+    today = date.today()
+    print(today)
