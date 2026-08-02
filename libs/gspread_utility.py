@@ -63,7 +63,19 @@ def get_gspread_worksheet(
     gspread_client: Client = get_gspread_client(),
     gspread_spreadsheet_key: str = None,
     gspread_worksheet_key: int = 0,
+    gspread_worksheet_name: str = None,
 ) -> Optional[Worksheet]:
+    if gspread_worksheet_name:
+        try:
+            sh = gspread_client.open_by_key(key=gspread_spreadsheet_key)
+            worksheet = sh.get_worksheet_by_id(gspread_worksheet_key)
+            print(f"API 호출 성공: {worksheet}")
+            return worksheet
+        except APIError as e:
+            # API 호출 실패한 경우 예외 처리
+            print(f"API 호출 실패: {str(e)}")
+            print(f"API 응답 정보: {e.response}")
+            return None
     try:
         sh = gspread_client.open_by_key(key=gspread_spreadsheet_key)
         worksheet = sh.get_worksheet_by_id(gspread_worksheet_key)
