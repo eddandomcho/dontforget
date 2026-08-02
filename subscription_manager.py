@@ -16,7 +16,7 @@ from libs.common_utility import convert_to_datetime_1
 def get_upcoming_due_dates(records, time_frame_days: int):
     new_list = list()
     for record in records:
-        if record.get("Days to Action") <= time_frame_days:
+        if record.get("Days to Action") <= time_frame_days and record.get("Days to Action") >= 0 :
             new_list.append(
                 {
                     "Name" : record.get("Name"),
@@ -27,11 +27,10 @@ def get_upcoming_due_dates(records, time_frame_days: int):
     return new_list
 
 
-def main():
-    gc = gspread.get_gspread_client()
-    print(type(gc), gc)
-    sh = gspread.get_gspread_spreadsheet(gc, "1hqZzKbPofKQuEHkP6or3ggnlKNZy2ulqCH5eWSyA1_E")
-    worksheet = sh.worksheet("Sheet1")
+def main(gspread_client,
+         spreadsheet_key):
+    sh = gspread.get_gspread_spreadsheet(gspread_client, spreadsheet_key)
+    worksheet = sh.worksheet("KRW")
     records = worksheet.get_all_records()
     records = gspread.filter_empty_rows(records)
     with open("viewing_use.json", "w", encoding = "utf-8") as f:
@@ -40,7 +39,9 @@ def main():
     # today = date.today()
     # print(today)
 
-    print(get_upcoming_due_dates(records, 30))
+    print(get_upcoming_due_dates(records, 19))
 
 if __name__ == "__main__":
-    main()
+    gc = gspread.get_gspread_client()
+    sh_key = "1hqZzKbPofKQuEHkP6or3ggnlKNZy2ulqCH5eWSyA1_E"
+    main(gc, sh_key)
