@@ -31,3 +31,4 @@ if __name__ == "__main__":
     """
     df = run_sql_query(sql_query, engine)
     print(df)
+    print(f"Sum: {df.iat[0, 0]}")

@@ -25,4 +25,5 @@ def rename_headers(df):
 
 def column_dt_to_date(df, 
                       column_name, 
-                      date_format = "%Y/%m/%d")
+                      date_format = "%Y/%m/%d"):
+    print("changing column dt to date")
